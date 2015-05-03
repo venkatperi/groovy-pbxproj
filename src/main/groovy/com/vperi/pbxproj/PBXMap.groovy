@@ -1,0 +1,8 @@
+package com.vperi.pbxproj
+
+/**
+ * Created by venkat on 5/1/15.
+ */
+class PBXMap extends PBXObject {
+    @Delegate Map<String, Object> map = [ : ]
+}

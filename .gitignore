@@ -1,0 +1,5 @@
+build
+pbxproj.iml
+.idea/
+.gradle
+.DS_Store
