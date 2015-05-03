@@ -46,7 +46,6 @@ public class XcodeProj {
             it.value.findAll { it.key != "isa" }.each {
                 obj."$it.key" = convert( it.value )
             }
-            objects[ it.key ] = obj
         }
 
         rootObject = objects[ root.rootObject.toString() ]
