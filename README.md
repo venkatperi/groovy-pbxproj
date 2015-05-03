@@ -29,8 +29,7 @@ seamless pass-through property dereferencing:
         return theObject().getProperty( name )
     }
 ```
-* PBXList & PBXMap are specialized ```List<>``` and ```Map<>``` implementations that intercept getters for automatically 
-dereferencing PBXRefs.
-* PBXObjectManager is the pbxproj's key to object dictionary. It also provides a pbxproj compatible UUID generator 
-for creating objects.
+* ```PBXList``` & ```PBXMap``` are specialized ```List<>``` and ```Map<>``` implementations that intercept getters for automatically 
+dereferencing ```PBXRef```s.
+* ```PBXObjectManager``` is the pbxproj's key to object dictionary. It also provides a pbxproj compatible UUID generator for creating objects, for eventually writing pbxproj files.
 
