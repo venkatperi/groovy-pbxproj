@@ -1,4 +1,3 @@
-import com.vperi.pbxproj.PBXFileReference
 import com.vperi.pbxproj.PBXProject
 import com.vperi.pbxproj.XcodeProj
 import spock.lang.Specification
@@ -7,7 +6,6 @@ import spock.lang.Specification
  * Created by venkat on 5/2/15.
  */
 class LoadProjSpec extends Specification {
-
     def proj
 
     def setup() {
@@ -24,7 +22,6 @@ class LoadProjSpec extends Specification {
         expect:
         proj.archiveVersion == 1
         proj.objectVersion == 42
-        proj.classes.size() == 0
         proj.objects.size() > 0
         proj.rootObject != null
     }

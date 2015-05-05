@@ -1,5 +1,5 @@
 /*
- *  PBXApplicationReference.groovy
+ *  TreeVisitor.groovy
  *
  *  Copyright © 2015 Venkat Peri.
  *
@@ -10,7 +10,6 @@
 
 package com.vperi.pbxproj
 
-/**
- * Created by venkat on 5/1/15.
- */
-public class PBXApplicationReference extends PBXObject {}
+public interface TreeVisitor {
+    def visit( TreeWalkNode node )
+}

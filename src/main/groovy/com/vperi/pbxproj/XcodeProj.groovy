@@ -1,3 +1,13 @@
+/*
+ *  XcodeProj.groovy
+ *
+ *  Copyright © 2015 Venkat Peri.
+ *
+ *  This software may be modified and distributed under the terms
+ *  of the MIT license.  See the LICENSE file for details.
+ *
+ */
+
 package com.vperi.pbxproj
 
 import com.dd.plist.NSArray
@@ -5,18 +15,15 @@ import com.dd.plist.NSDictionary
 import com.dd.plist.NSObject
 import com.dd.plist.NSString
 import com.dd.plist.PropertyListParser
+import com.vperi.pbxproj.util.PBXUuid
 
-/**
- *  Created by venkat on 5/1/15.
- */
 public class XcodeProj {
-    def archiveVersion
-    def objectVersion
-    def classes
-    def rootObject
-    def objects = new PBXObjectManager()
-
-    def _lookup = { k -> objects[ k ] }
+    private def _lookup = { k -> objects[ k ] }
+    public def archiveVersion
+    public def objectVersion
+    public def classes
+    public PBXObject rootObject
+    final def objects = new PBXObjectManager()
 
     public XcodeProj( String path ) {
         this( PropertyListParser.parse( path ) )
@@ -36,30 +43,32 @@ public class XcodeProj {
 
     private XcodeProj( NSObject root ) {
         assert root, "root is null!"
-        archiveVersion = Integer.parseInt( convert( root.archiveVersion ) )
-        objectVersion = Integer.parseInt( convert( root.objectVersion ) )
+        archiveVersion = Integer.parseInt( root.archiveVersion.toString() )
+        objectVersion = Integer.parseInt( root.objectVersion.toString() )
         classes = convert( root.classes )
 
         root.objects.each {
             def type = it.value.isa.toString()
+            def key = it.key
             def obj = objects.create( type, it.key )
             it.value.findAll { it.key != "isa" }.each {
-                obj."$it.key" = convert( it.value )
+                def val = convert( it.value )
+                obj."$it.key" = val
             }
         }
 
         rootObject = objects[ root.rootObject.toString() ]
     }
 
-    def convert( NSString obj ) {
+    private def convert( NSString obj ) {
         convert( obj.toString() )
     }
 
-    def convert( String val ) {
-        ( val instanceof String && val =~ /[0-9A-F]{24}/ ) ? new PBXRef( val, _lookup ) : val
+    private def convert( String val ) {
+        PBXUuid.isValid( val ) ? new PBXRef( val, _lookup ) : new PBXLiteral( val )
     }
 
-    def convert( NSArray obj ) {
+    private def convert( NSArray obj ) {
         def list = new PBXList()
         for ( int i = 0; i < obj.count(); i++ ) {
             list.add( convert( obj.objectAtIndex( i ) ) )
@@ -67,7 +76,12 @@ public class XcodeProj {
         list
     }
 
-    def convert( NSDictionary obj ) {
-        obj.collectEntries { [ ( it.key ): convert( it.value ) ] }
+    private def convert( NSDictionary obj ) {
+        def map = new PBXMap()
+        obj.allKeys().each {
+            def val = obj[ it ]
+            map[ it ] = convert( val )
+        }
+        map
     }
 }

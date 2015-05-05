@@ -1,5 +1,5 @@
 /*
- *  PBXMap.groovy
+ *  TreeWalkNode.groovy
  *
  *  Copyright © 2015 Venkat Peri.
  *
@@ -10,14 +10,13 @@
 
 package com.vperi.pbxproj
 
-import com.vperi.pbxproj.util.PBXUuid
+import groovy.transform.TupleConstructor
 
-/**
- * Created by venkat on 5/1/15.
- */
-public class PBXMap extends PBXObject {
-
-    PBXMap() {
-        this._key = PBXUuid.createId()
-    }
+@TupleConstructor
+class TreeWalkNode {
+    String name
+    int level
+    PBXObject object
+    TreeWalkNode parent
+    Object parentContext
 }
